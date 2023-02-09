@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/Andrem19/Timer_Job/variables"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
+var m sync.Mutex
+
 func Timer(cmd []string, chat_id string) (string, error) {
 	switch strings.ToLower(cmd[1]) {
 	case "start":
@@ -42,7 +45,9 @@ func Start(minutes string, chat_id string) {
 			sec := left % 60
 			ch_id, _ := strconv.Atoi(chat_id)
 			msg := tgbotapi.NewMessage(int64(ch_id), fmt.Sprintf("Left to finish %d:%v\n", int(minutes), sec))
+			m.Lock()
 			variables.Bot.Send(msg)
+			m.Unlock()
 		}
 		variables.Stop_timer = false
 }
