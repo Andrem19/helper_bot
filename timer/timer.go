@@ -37,7 +37,7 @@ func Start(minutes string, chat_id string) {
 			if variables.Stop_timer{
 				break
 			}
-			time.Sleep(time.Second * 4)
+			time.Sleep(time.Second * 10)
 
 			left := (time_finish - time.Now().Unix())
 

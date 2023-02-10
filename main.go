@@ -5,14 +5,16 @@ import (
 	"strconv"
 
 	"github.com/Andrem19/Timer_Job/helpers"
+	"github.com/Andrem19/Timer_Job/switcher"
 	"github.com/Andrem19/Timer_Job/variables"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func main() {
-	config, err := helpers.LoadConfig(".")
-	// helpers.StartWithDb(config)
-	variables.Bot, err = tgbotapi.NewBotAPI(config.TELEGTRAM_BOT_TOKEN)
+	helpers.LoadConfig(".")
+	variables.StartWithDb()
+	var err error
+	variables.Bot, err = tgbotapi.NewBotAPI(variables.Config.TELEGTRAM_BOT_TOKEN)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -29,7 +31,7 @@ func main() {
 	for update := range updates {
 		if update.Message != nil { // If we got a message
 			chat_id := strconv.Itoa(int(update.Message.Chat.ID))
-			answer, err := helpers.Switcher(update.Message.Text, chat_id)
+			answer, err := switcher.Switcher(update.Message.Text, chat_id)
 			if err != nil {
 				helpers.AddToLog(err.Error())
 			}
