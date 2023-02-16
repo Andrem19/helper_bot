@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/Andrem19/Timer_Job/coin"
 	com "github.com/Andrem19/Timer_Job/commands"
 	"github.com/Andrem19/Timer_Job/helpers"
 	"github.com/Andrem19/Timer_Job/timer"
@@ -27,6 +28,8 @@ func Switcher(message string, chat_id string) (string, error) {
 		return Switcher(last_command, chat_id)
 	case "cmd":
 		return com.Command(commands)
+	case "coin":
+		return coin.CountPriceAndAmounts(commands)
 	default:
 		return "", nil
 	}
